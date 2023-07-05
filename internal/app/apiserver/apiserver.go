@@ -7,10 +7,12 @@ type APIServer struct {
 
 //Create new instance of APIServer type
 func New(config *Config) *APIServer {
-	return &APIServer{}
+	return &APIServer{
+		config: config,
+	}
 }
 
 //Starting API Server, return error if smth went wrong
 func (s *APIServer) Start() error {
-
+	return nil
 }
