@@ -6,7 +6,7 @@ import (
 	"log"
 
 	"github.com/BurntSushi/toml"
-	"github.com/HellfastUSMC/go_api"
+	"github.com/HellfastUSMC/goapi"
 )
 
 var (
