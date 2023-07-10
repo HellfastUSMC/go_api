@@ -1,5 +1,8 @@
-.PHONY: build
+.PHONY: test
+test:
+	go test -v -timeout 30s
 
+.PHONY: build
 build:
 	go build -v ./cmd/apiserver
 
