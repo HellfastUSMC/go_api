@@ -1,20 +1,22 @@
 package apiserver
 
 import (
+	"github.com/HellfastUSMC/goapi/internal/app/store"
 	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
 	"io"
 	"net/http"
 )
 
-// API Server type
+// APIServer API Server type
 type APIServer struct {
 	config *Config
 	logger *logrus.Logger
 	router *mux.Router
+	store  *store.Store
 }
 
-// Create new instance of APIServer type
+// New Create new instance of APIServer type
 func New(config *Config) *APIServer {
 	return &APIServer{
 		config: config,
@@ -23,7 +25,7 @@ func New(config *Config) *APIServer {
 	}
 }
 
-// Starting API Server, return error if smth went wrong
+// Start Starting API Server, return error if smth went wrong
 func (s *APIServer) Start() error {
 	if err := s.ConfLogger(); err != nil {
 		return err
@@ -31,6 +33,9 @@ func (s *APIServer) Start() error {
 
 	s.logger.Info("starting api server")
 	s.ConfRouter()
+	if err := s.confStore(); err != nil {
+		return err
+	}
 	return http.ListenAndServe(s.config.BindAddr, s.router)
 }
 
@@ -47,8 +52,20 @@ func (s *APIServer) ConfRouter() {
 	s.router.HandleFunc("/hello", s.handleHello())
 }
 
+func (s *APIServer) confStore() error {
+	st := store.New(s.config.Store)
+	if err := st.Open(); err != nil {
+		return err
+	}
+	s.store = st
+	return nil
+}
+
 func (s *APIServer) handleHello() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		io.WriteString(w, "hello")
+		_, err := io.WriteString(w, "hello")
+		if err != nil {
+			return
+		}
 	}
 }

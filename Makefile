@@ -1,6 +1,6 @@
 .PHONY: test
 test:
-	go test -v -timeout 30s
+	go test -v -race -timeout 30s ./ ...
 
 .PHONY: build
 build:

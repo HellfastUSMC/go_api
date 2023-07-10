@@ -1,2 +1,5 @@
 bind_addr = ":6060"
 log_lvl = "error"
+
+[store]
+database_url = "host=localhost dbname=restapi_dev user=postgres password=123 sslmode=disable"
